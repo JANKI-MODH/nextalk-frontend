@@ -138,7 +138,6 @@ const Rooms = () => {
                         className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-lg hover:from-primary-600 hover:to-primary-700 transition"
                     >
                         <span>+</span>
-                        <span>Create Room</span>
                     </button>
                 </div>
                 

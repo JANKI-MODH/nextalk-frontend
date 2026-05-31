@@ -286,33 +286,39 @@ const Chat = () => {
             <div className="flex-1 flex flex-col min-w-0 h-full">
                 
                 {/* Chat Header */}
-                <div className="bg-white dark:bg-dark-200 border-b border-gray-200 dark:border-gray-700 px-4 py-3 flex items-center justify-between flex-shrink-0">
-                    <div className="flex items-center gap-3">
-                        {/* Mobile menu button */}
-                        <button 
-                            onClick={() => setMobileSidebarOpen(true)}
-                            className="md:hidden p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-dark-100 rounded-lg transition"
-                        >
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                            </svg>
-                        </button>
-                        
-                        <div>
-                            <h1 className="text-lg font-bold text-gray-800 dark:text-white">{room?.name}</h1>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">
-                                {messages.filter(m => !m.isSystem).length} messages • {socketReady ? 'Connected' : 'Connecting...'}
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <div className="flex items-center gap-2">
-                        <div className={`w-2 h-2 rounded-full ${socketReady ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></div>
-                        <span className="text-xs text-gray-500 dark:text-gray-400 hidden sm:inline">
-                            {socketReady ? 'Live' : 'Offline'}
-                        </span>
-                    </div>
-                </div>
+{/* Chat Header - Fixed at top */}
+<div className="bg-white dark:bg-dark-200 border-b border-gray-200 dark:border-gray-700 px-4 py-3 flex items-center justify-between flex-shrink-0 sticky top-0 z-10">
+    <div className="flex items-center gap-3">
+        {/* Back Button - Always visible */}
+        <button 
+            onClick={() => navigate('/rooms')}
+            className="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-dark-100 rounded-lg transition"
+            aria-label="Go back"
+        >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+        </button>
+        
+        {/* Mobile menu button (only on mobile) */}
+        <button 
+            onClick={() => setMobileSidebarOpen(true)}
+            className="md:hidden p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-dark-100 rounded-lg transition"
+            aria-label="Open menu"
+        >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+        
+        <div>
+            <h1 className="text-lg font-bold text-gray-800 dark:text-white">{room?.name}</h1>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+                {messages.filter(m => !m.isSystem).length} messages • {socketReady ? 'Connected' : 'Connecting...'}
+            </p>
+        </div>
+    </div>
+</div>
                 
                 {/* Messages Area - flex-1 to take remaining space, overflow-y-auto for scrolling */}
                 <div 
