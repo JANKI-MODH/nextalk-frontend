@@ -1,16 +1,33 @@
-# React + Vite
+# NexTalk - Real-Time Chat Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A real-time chat application built with React, Node.js, Socket.io, and PostgreSQL.
 
-Currently, two official plugins are available:
+## Live Demo
+🔗 **Try it here:** https://nextalk-frontend.onrender.com
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
+- ✅ Real-time messaging with Socket.io
+- ✅ User authentication (JWT)
+- ✅ Create and join chat rooms
+- ✅ Dark/Light mode
+- ✅ Typing indicators
+- ✅ Online/offline presence
+- ✅ Mobile responsive design
 
-## React Compiler
+## Tech Stack
+- **Frontend:** React, Vite, Tailwind CSS
+- **Backend:** Node.js, Express, Socket.io
+- **Database:** PostgreSQL
+- **Deployment:** Render.com
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Screenshots
+![Login Screen](screenshots/login.png)
+![Chat Screen](screenshots/chat.png)
 
-## Expanding the ESLint configuration
+## Local Development
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Backend Setup
+```bash
+cd nextalk-backend
+npm install
+npm run dev
