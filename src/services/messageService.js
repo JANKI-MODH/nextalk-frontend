@@ -19,21 +19,21 @@ api.interceptors.request.use((config) => {
 });
 
 /**
- * Get messages for a room
+ * Get messages for a room with pagination
  * @param {number} roomId - Room ID
- * @param {number} limit - Number of messages to fetch
- * @returns {Promise} - List of messages
+ * @param {number} page - Page number (1-based)
+ * @param {number} limit - Number of messages per page
+ * @returns {Promise} - List of messages (oldest to newest)
  */
-export const getRoomMessages = async (roomId, limit = 50) => {
-    const response = await api.get(`/messages/room/${roomId}?limit=${limit}`);
+export const getRoomMessages = async (roomId, page = 1, limit = 50) => {
+    const response = await api.get(`/messages/room/${roomId}`, {
+        params: { page, limit }
+    });
     return response.data;
 };
 
 /**
  * Send a message (HTTP fallback, use socket for real-time)
- * @param {number} roomId - Room ID
- * @param {string} message - Message content
- * @returns {Promise} - Sent message data
  */
 export const sendMessageHTTP = async (roomId, message) => {
     const response = await api.post('/messages', { roomId, message });

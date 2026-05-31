@@ -1,3 +1,68 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom base styles */
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900;
+  }
+  
+  body.dark {
+    @apply bg-dark-100 text-gray-100;
+  }
+}
+
+/* Custom scrollbar */
+@layer components {
+  .scrollbar-custom::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .scrollbar-custom::-webkit-scrollbar-track {
+    background: #E5E7EB;
+    border-radius: 9999px;
+  }
+  
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    background: #D1D5DB;
+    border-radius: 9999px;
+  }
+  
+  .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+    background: #9CA3AF;
+  }
+  
+  .dark .scrollbar-custom::-webkit-scrollbar-track {
+    background: #1E1E2E;
+  }
+  
+  .dark .scrollbar-custom::-webkit-scrollbar-thumb {
+    background: #374151;
+  }
+  
+  .dark .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+    background: #4B5563;
+  }
+}
+
+/* Smooth transitions for theme switching */
+@layer utilities {
+  .transition-theme {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
+  }
+}
+
+/* Apply transitions to all elements for smooth theme switching */
+* {
+  transition-property: background-color, border-color, color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* But don't transition layout properties */
+.layout-transition {
+  transition: none;
+}

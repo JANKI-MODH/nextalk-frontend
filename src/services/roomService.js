@@ -35,6 +35,13 @@ export const createRoom = async (name) => {
  */
 export const getAllRooms = async () => {
     const response = await api.get('/rooms');
+    // Ensure each room has member_count
+    if (response.data.rooms) {
+        response.data.rooms = response.data.rooms.map(room => ({
+            ...room,
+            member_count: room.member_count || room.membercount || 0
+        }));
+    }
     return response.data;
 };
 
@@ -44,6 +51,12 @@ export const getAllRooms = async () => {
  */
 export const getMyRooms = async () => {
     const response = await api.get('/rooms/my/rooms');
+    if (response.data.rooms) {
+        response.data.rooms = response.data.rooms.map(room => ({
+            ...room,
+            member_count: room.member_count || room.membercount || 0
+        }));
+    }
     return response.data;
 };
 

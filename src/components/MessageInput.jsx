@@ -1,37 +1,23 @@
 import React, { useState, useRef, useEffect } from 'react';
+import EmojiPicker from 'emoji-picker-react';
 
-/**
- * Message Input Component
- * Input bar for typing and sending messages
- * 
- * @param {Object} props
- * @param {Function} props.onSendMessage - Function to call when sending message
- * @param {Function} props.onTypingStart - Function to call when user starts typing
- * @param {Function} props.onTypingStop - Function to call when user stops typing
- * @param {boolean} props.disabled - Whether input is disabled
- */
 const MessageInput = ({ onSendMessage, onTypingStart, onTypingStop, disabled = false }) => {
     const [message, setMessage] = useState('');
     const [isTyping, setIsTyping] = useState(false);
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const typingTimeoutRef = useRef(null);
+    const inputRef = useRef(null);
     
-    /**
-     * Handle typing detection
-     * Triggers typing_start event when user starts typing
-     * Triggers typing_stop after 1 second of no typing
-     */
     const handleTyping = () => {
         if (!isTyping && !disabled) {
             setIsTyping(true);
             onTypingStart();
         }
         
-        // Clear previous timeout
         if (typingTimeoutRef.current) {
             clearTimeout(typingTimeoutRef.current);
         }
         
-        // Set timeout to stop typing after 1 second of no input
         typingTimeoutRef.current = setTimeout(() => {
             if (isTyping) {
                 setIsTyping(false);
@@ -40,34 +26,25 @@ const MessageInput = ({ onSendMessage, onTypingStart, onTypingStop, disabled = f
         }, 1000);
     };
     
-    /**
-     * Handle input change
-     */
     const handleChange = (e) => {
         setMessage(e.target.value);
         handleTyping();
     };
     
-    /**
-     * Send message
-     */
     const sendMessage = () => {
         if (message.trim() && !disabled) {
             onSendMessage(message.trim());
             setMessage('');
             
-            // Stop typing indicator after sending
             if (typingTimeoutRef.current) {
                 clearTimeout(typingTimeoutRef.current);
             }
             setIsTyping(false);
             onTypingStop();
+            setShowEmojiPicker(false);
         }
     };
     
-    /**
-     * Handle Enter key press
-     */
     const handleKeyPress = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -75,7 +52,11 @@ const MessageInput = ({ onSendMessage, onTypingStart, onTypingStop, disabled = f
         }
     };
     
-    // Cleanup timeout on unmount
+    const onEmojiClick = (emojiObject) => {
+        setMessage(prev => prev + emojiObject.emoji);
+        inputRef.current?.focus();
+    };
+    
     useEffect(() => {
         return () => {
             if (typingTimeoutRef.current) {
@@ -85,27 +66,48 @@ const MessageInput = ({ onSendMessage, onTypingStart, onTypingStop, disabled = f
     }, []);
     
     return (
-        <div className="border-t border-gray-200 bg-white p-4">
-            <div className="flex items-center space-x-3">
-                {/* Message Input Field */}
-                <input
-                    type="text"
-                    value={message}
-                    onChange={handleChange}
-                    onKeyPress={handleKeyPress}
-                    placeholder={disabled ? "Connecting..." : "Type a message..."}
-                    disabled={disabled}
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
-                />
-                
-                {/* Send Button */}
-                <button
-                    onClick={sendMessage}
-                    disabled={!message.trim() || disabled}
-                    className="px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                    Send
-                </button>
+        <div className="bg-white dark:bg-dark-200 border-t border-gray-200 dark:border-gray-700 p-4">
+            <div className="max-w-4xl mx-auto">
+                <div className="flex items-center gap-2">
+                    {/* Emoji Button - Working */}
+                    <div className="relative">
+                        <button
+                            onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                            className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 rounded-full hover:bg-gray-100 dark:hover:bg-dark-100 transition"
+                        >
+                            😊
+                        </button>
+                        {showEmojiPicker && (
+                            <div className="absolute bottom-full mb-2 left-0 z-20">
+                                <EmojiPicker onEmojiClick={onEmojiClick} />
+                            </div>
+                        )}
+                    </div>
+                    
+                    {/* Message Input - Working */}
+                    <input
+                        ref={inputRef}
+                        type="text"
+                        value={message}
+                        onChange={handleChange}
+                        onKeyPress={handleKeyPress}
+                        placeholder={disabled ? "Connecting..." : "Type a message..."}
+                        disabled={disabled}
+                        className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-dark-100 dark:text-white disabled:opacity-50 transition"
+                    />
+                    
+                    {/* Send Button - Working */}
+                    <button
+                        onClick={sendMessage}
+                        disabled={!message.trim() || disabled}
+                        className="px-5 py-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-full hover:from-primary-600 hover:to-primary-700 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+                    >
+                        Send
+                    </button>
+                </div>
+                <p className="text-xs text-gray-400 dark:text-gray-500 mt-2 text-center">
+                    Press Enter to send • Shift+Enter for new line
+                </p>
             </div>
         </div>
     );
